@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Send, Square, Trash2 } from 'lucide-react'
 import { useOpencode } from '../../hooks/useOpencode'
 import { useChatStore } from '../../stores/chatStore'
@@ -11,7 +11,18 @@ export function PromptInput() {
   const { sendPrompt, error } = useOpencode()
   const isProcessing = useChatStore((s) => s.isProcessing)
   const clearMessages = useChatStore((s) => s.clearMessages)
+  const draftPrompt = useChatStore((s) => s.draftPrompt)
+  const setDraftPrompt = useChatStore((s) => s.setDraftPrompt)
   const currentProject = useAppStore((s) => s.currentProject)
+
+  // Sync draftPrompt from store (set by preset quick-action chips)
+  useEffect(() => {
+    if (draftPrompt) {
+      setPrompt(draftPrompt)
+      setDraftPrompt('')
+      textareaRef.current?.focus()
+    }
+  }, [draftPrompt, setDraftPrompt])
 
   const handleSubmit = useCallback(async () => {
     const trimmed = prompt.trim()

@@ -31,6 +31,10 @@ export async function readFile(filePath: string): Promise<string> {
   return await invoke<string>('read_file_content', { filePath })
 }
 
+export async function saveFile(filePath: string, content: string): Promise<void> {
+  await invoke('write_file_content', { filePath, content })
+}
+
 export async function selectFolder(): Promise<string | null> {
   return await invoke<string | null>('select_folder')
 }

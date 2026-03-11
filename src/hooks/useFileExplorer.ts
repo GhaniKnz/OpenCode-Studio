@@ -1,10 +1,12 @@
 import { useCallback } from 'react'
 import { getProjectFiles, readFile } from '../services/opencodeService'
 import { useExplorerStore } from '../stores/explorerStore'
+import { useEditorStore } from '../stores/editorStore'
 import type { FileNode } from '../types'
 
 export function useFileExplorer() {
-  const { setFileTree, setSelectedFile, setFileContent, setLoading } = useExplorerStore()
+  const { setFileTree, setSelectedFile, setLoading } = useExplorerStore()
+  const { openTab } = useEditorStore()
 
   const loadProjectFiles = useCallback(
     async (projectPath: string) => {
@@ -14,13 +16,12 @@ export function useFileExplorer() {
         setFileTree(tree)
       } catch (err) {
         console.error('Failed to load project files:', err)
-        // Set mock data if backend fails
         setFileTree(createMockFileTree(projectPath))
       } finally {
         setLoading(false)
       }
     },
-    [setFileTree, setLoading]
+    [setFileTree, setLoading],
   )
 
   const openFile = useCallback(
@@ -30,15 +31,15 @@ export function useFileExplorer() {
       setLoading(true)
       try {
         const content = await readFile(file.path)
-        setFileContent(content)
+        openTab(file, content)
       } catch (err) {
         console.error('Failed to read file:', err)
-        setFileContent(`// Could not read file: ${file.path}`)
+        openTab(file, `// Could not read file: ${file.path}`)
       } finally {
         setLoading(false)
       }
     },
-    [setSelectedFile, setFileContent, setLoading]
+    [setSelectedFile, setLoading, openTab],
   )
 
   return { loadProjectFiles, openFile }

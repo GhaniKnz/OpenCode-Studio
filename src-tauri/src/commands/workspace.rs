@@ -109,6 +109,31 @@ pub fn read_file_content(file_path: String) -> Result<String, String> {
     std::fs::read_to_string(path).map_err(|e| format!("Failed to read file: {}", e))
 }
 
+/// Write content to a file (used by the code editor to save changes)
+#[tauri::command]
+pub fn write_file_content(file_path: String, content: String) -> Result<(), String> {
+    let path = std::path::Path::new(&file_path);
+
+    // Reject non-existent paths (must be an existing file, not a new location)
+    if !path.exists() {
+        return Err(format!("File does not exist: {}", file_path));
+    }
+    if !path.is_file() {
+        return Err(format!("Not a file: {}", file_path));
+    }
+
+    // Reject paths that contain traversal sequences after canonicalization
+    let canonical = path
+        .canonicalize()
+        .map_err(|e| format!("Cannot resolve path: {}", e))?;
+    let canonical_str = canonical.to_string_lossy();
+    if canonical_str.contains("..") {
+        return Err("Path traversal not allowed".to_string());
+    }
+
+    std::fs::write(&canonical, content).map_err(|e| format!("Failed to write file: {}", e))
+}
+
 /// Open a folder picker dialog
 #[tauri::command]
 pub async fn select_folder(app: tauri::AppHandle) -> Result<Option<String>, String> {
