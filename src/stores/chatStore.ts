@@ -4,16 +4,19 @@ import type { ChatMessage } from '../types'
 interface ChatState {
   messages: ChatMessage[]
   isProcessing: boolean
+  draftPrompt: string
 
   addMessage: (message: ChatMessage) => void
   updateLastMessage: (content: string) => void
   clearMessages: () => void
   setProcessing: (isProcessing: boolean) => void
+  setDraftPrompt: (prompt: string) => void
 }
 
 export const useChatStore = create<ChatState>()((set) => ({
   messages: [],
   isProcessing: false,
+  draftPrompt: '',
 
   addMessage: (message) =>
     set((state) => ({ messages: [...state.messages, message] })),
@@ -34,4 +37,6 @@ export const useChatStore = create<ChatState>()((set) => ({
   clearMessages: () => set({ messages: [] }),
 
   setProcessing: (isProcessing) => set({ isProcessing }),
+
+  setDraftPrompt: (draftPrompt) => set({ draftPrompt }),
 }))

@@ -1,7 +1,7 @@
 mod commands;
 mod types;
 
-use commands::workspace::{get_project_files, read_file_content, select_folder};
+use commands::workspace::{get_project_files, read_file_content, write_file_content, select_folder};
 use commands::process::{run_opencode, check_executable, get_app_version};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -14,6 +14,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_project_files,
             read_file_content,
+            write_file_content,
             select_folder,
             run_opencode,
             check_executable,

@@ -1,10 +1,7 @@
 import { useEffect } from 'react'
-import { ChatPanel } from '../features/chat/ChatPanel'
-import { PromptInput } from '../features/chat/PromptInput'
 import { FileTree } from '../features/explorer/FileTree'
-import { LogsPanel } from '../features/logs/LogsPanel'
-import { QuickActions } from '../features/quick-actions/QuickActions'
-import { ChangedFilesPanel } from '../features/workspace/ChangedFilesPanel'
+import { CodeEditor } from '../features/editor/CodeEditor'
+import { AgentPanel } from '../features/agents/AgentPanel'
 import { useAppStore } from '../stores/appStore'
 import { useFileExplorer } from '../hooks/useFileExplorer'
 
@@ -31,28 +28,14 @@ export function MainPage() {
         </div>
       </div>
 
-      {/* Center: Chat */}
+      {/* Center: Code Editor */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <div className="flex-1 overflow-hidden">
-          <ChatPanel />
-        </div>
-        <PromptInput />
+        <CodeEditor />
       </div>
 
-      {/* Right: Tools */}
-      <div className="w-64 border-l border-border flex flex-col shrink-0 overflow-hidden">
-        {/* Quick Actions */}
-        <div className="flex-[2] overflow-hidden border-b border-border min-h-0">
-          <QuickActions />
-        </div>
-        {/* Logs */}
-        <div className="flex-[2] overflow-hidden border-b border-border min-h-0">
-          <LogsPanel />
-        </div>
-        {/* Changed Files */}
-        <div className="flex-1 overflow-hidden min-h-0">
-          <ChangedFilesPanel />
-        </div>
+      {/* Right: OpenCode Studio Panel */}
+      <div className="w-80 shrink-0 overflow-hidden flex flex-col">
+        <AgentPanel />
       </div>
     </div>
   )

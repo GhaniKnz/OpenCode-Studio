@@ -1,5 +1,7 @@
 export type ProjectType = 'unity' | 'web' | 'mobile' | 'unknown'
 
+export type AgentPreset = 'general' | 'unity' | 'web' | 'mobile'
+
 export interface Project {
   id: string
   name: string
@@ -58,7 +60,7 @@ export interface Agent {
   id: string
   name: string
   description: string
-  domain: string
+  domain: AgentPreset
   systemPromptTemplate: string
   suggestedActions: string[]
   status: 'idle' | 'running' | 'completed' | 'error'
