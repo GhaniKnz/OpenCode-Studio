@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generateId(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36)
+  return crypto.randomUUID()
 }
 
 export function formatTimestamp(iso: string): string {
@@ -20,7 +20,9 @@ export function formatTimestamp(iso: string): string {
 }
 
 export function getFileExtension(filename: string): string {
-  return filename.slice(filename.lastIndexOf('.') + 1).toLowerCase()
+  const dotIndex = filename.lastIndexOf('.')
+  if (dotIndex === -1 || dotIndex === filename.length - 1) return ''
+  return filename.slice(dotIndex + 1).toLowerCase()
 }
 
 export function detectProjectType(path: string): import('../types').ProjectType {
